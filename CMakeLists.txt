@@ -6,7 +6,7 @@ if(COMMAND cmake_policy)
     cmake_policy(SET CMP0003 NEW)
 endif(COMMAND cmake_policy)
 
-include (darling_exe)
+include (osxie_exe)
 
 add_definitions(-nostdinc)
 add_definitions(-D_LIBCPP_NO_EXCEPTIONS=1)
@@ -119,8 +119,8 @@ add_executable(system_loader
 	dyld3/PathOverrides.cpp
 	dyld3/SharedCacheRuntime.cpp
 	dyld3/RootsChecker.cpp
-	darling/src/hell.c
-	darling/src/sandbox-dummy.c
+	osxie/src/hell.c
+	osxie/src/sandbox-dummy.c
 	version.c # Too make the .exp file work
 )
 
@@ -149,13 +149,13 @@ endif (BUILD_TARGET_64BIT)
 
 make_fat(system_loader)
 
-install(TARGETS system_dyld DESTINATION libexec/darling/usr/lib/system)
-install(TARGETS system_loader DESTINATION libexec/darling/usr/lib)
+install(TARGETS system_dyld DESTINATION libexec/osxie/usr/lib/system)
+install(TARGETS system_loader DESTINATION libexec/osxie/usr/lib)
 install(FILES
 	doc/man/man1/dyld.1
 	doc/man/man1/dyld_usage.1
 	DESTINATION
-	libexec/darling/usr/share/man/man1
+	libexec/osxie/usr/share/man/man1
 )
 install(FILES
 	doc/man/man3/dladdr.3
@@ -166,6 +166,6 @@ install(FILES
 	doc/man/man3/dlsym.3
 	doc/man/man3/dyld.3
 	DESTINATION
-	libexec/darling/usr/share/man/man3
+	libexec/osxie/usr/share/man/man3
 )
 
