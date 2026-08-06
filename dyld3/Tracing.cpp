@@ -32,7 +32,7 @@
 #include "Loading.h"
 #include "Tracing.h"
 
-#ifdef DARLING
+#if defined(DARLING) || defined(OSXIE)
 #define kdebug_trace(...)
 #define kdebug_is_enabled(...) false
 #endif

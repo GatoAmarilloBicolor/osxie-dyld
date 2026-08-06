@@ -2575,7 +2575,7 @@ uintptr_t ImageLoaderMachO::reserveAnAddressRange(size_t length, const ImageLoad
 	vm_size_t size = length;
 	// In Darling, we're not the only ones doing memory mapping.
 	// Therefore, we cannot dictate addresses, because we could (would!) conflict with the ELF loader.
-#ifndef DARLING
+#if !(defined(DARLING) || defined(OSXIE)) && !defined(OSXIE)
 	// in PIE programs, load initial dylibs after main executable so they don't have fixed addresses either
 	if ( fgNextPIEDylibAddress != 0 ) {
 		 // add small (0-3 pages) random padding between dylibs

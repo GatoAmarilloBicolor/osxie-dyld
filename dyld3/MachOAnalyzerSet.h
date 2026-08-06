@@ -107,7 +107,7 @@ namespace dyld3 {
 struct VIS_HIDDEN MachOAnalyzerSet
 {
 public:
-#ifdef DARLING
+#if defined(DARLING) || defined(OSXIE)
     MachOAnalyzerSet();
 #endif
     struct FixupTarget;

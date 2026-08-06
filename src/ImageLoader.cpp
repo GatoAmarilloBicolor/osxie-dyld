@@ -1961,7 +1961,7 @@ void ImageLoader::forEachReExportDependent( void (^callback)(const ImageLoader*,
 
 
 VECTOR_NEVER_DESTRUCTED_IMPL(ImageLoader::InterposeTuple);
-#ifndef DARLING
+#if !(defined(DARLING) || defined(OSXIE)) && !defined(OSXIE)
 VECTOR_NEVER_DESTRUCTED_IMPL(ImagePair);
 #endif
 

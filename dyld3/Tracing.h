@@ -35,7 +35,7 @@
 #include <System/sys/kdebug.h>
 #include <System/sys/reason.h>
 
-#ifdef DARLING
+#if defined(DARLING) || defined(OSXIE)
 #define kdebug_trace_string(...) ((uint64_t)-1)
 #endif
 

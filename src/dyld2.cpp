@@ -86,7 +86,7 @@
 
 #endif
 
-#if TARGET_OS_SIMULATOR || defined(DARLING)
+#if TARGET_OS_SIMULATOR || defined(DARLING) || defined(OSXIE)
 	enum {
 		AMFI_DYLD_INPUT_PROC_IN_SIMULATOR = (1 << 0),
 	};
@@ -100,7 +100,7 @@
 		AMFI_DYLD_OUTPUT_ALLOW_LIBRARY_INTERPOSING = (1 << 6),
 	};
 	extern "C" int amfi_check_dyld_policy_self(uint64_t input_flags, uint64_t* output_flags);
-#ifdef DARLING
+#if defined(DARLING) || defined(OSXIE)
     int amfi_check_dyld_policy_self(uint64_t input_flags, uint64_t* output_flags) { *output_flags = 0x3F; return 0; }
 #endif
 #else
@@ -1468,7 +1468,7 @@ static void setRunInitialzersOldWay()
 
 static bool sandboxBlocked(const char* path, const char* kind)
 {
-#if TARGET_OS_SIMULATOR || defined(DARLING)
+#if TARGET_OS_SIMULATOR || defined(DARLING) || defined(OSXIE)
 	// sandbox calls not yet supported in simulator runtime
 	return false;
 #else
@@ -5317,7 +5317,7 @@ static void configureProcessRestrictions(const macho_header* mainExecutableMH, c
 	uint64_t amfiInputFlags = 0;
 #if TARGET_OS_SIMULATOR
 	amfiInputFlags |= AMFI_DYLD_INPUT_PROC_IN_SIMULATOR;
-#elif TARGET_OS_OSX && !defined(DARLING)
+#elif TARGET_OS_OSX && !(defined(DARLING) || defined(OSXIE))
 	if ( hasRestrictedSegment(mainExecutableMH) )
 		amfiInputFlags |= AMFI_DYLD_INPUT_PROC_HAS_RESTRICT_SEG;
 #elif TARGET_OS_IPHONE
@@ -5457,7 +5457,7 @@ void notifyKernelAboutImage(const struct macho_header* mh, const char* fileInfo)
 
 #if TARGET_OS_OSX
 static void* getProcessInfo() { return dyld::gProcessInfo; }
-#ifdef DARLING
+#if defined(DARLING) || defined(OSXIE)
 #undef kdebug_is_enabled
 #undef kdebug_trace
 #undef kdebug_trace_string
@@ -6778,7 +6778,7 @@ _main(const macho_header* mainExecutableMH, uintptr_t mainExecutableSlide,
 	if ( sJustBuildClosure )
 		sClosureMode = ClosureMode::On;
 
-#ifndef DARLING
+#if !(defined(DARLING) || defined(OSXIE)) && !defined(OSXIE)
 	// While the shared cache code doesn't prevent Darling's libraries
 	// from being loaded, we don't plan on building our libraries 
 	// into a shared cache.
@@ -6802,7 +6802,7 @@ _main(const macho_header* mainExecutableMH, uintptr_t mainExecutableSlide,
 	}
 #endif // !DARLING
 
-#if !TARGET_OS_SIMULATOR && !defined(DARLING)
+#if !TARGET_OS_SIMULATOR && !(defined(DARLING) || defined(OSXIE))
 	if ( getpid() == 1 ) {
 		// Get the value as set by the boot-args
 		uint64_t commPageValue = 0;
@@ -6888,7 +6888,7 @@ _main(const macho_header* mainExecutableMH, uintptr_t mainExecutableSlide,
 		// First test to see if we forced in dyld2 via a kernel boot-arg
 		if ( dyld3::BootArgs::forceDyld2() ) {
 			sClosureMode = ClosureMode::Off;
-#ifndef DARLING
+#if !(defined(DARLING) || defined(OSXIE)) && !defined(OSXIE)
 		} else if ( inDenyList(sExecPath) ) {
 			sClosureMode = ClosureMode::Off;
 #endif

@@ -229,7 +229,7 @@ private:
                                 dyld_process_info_base(dyld_platform_t platform, unsigned imageCount, unsigned aotImageCount, size_t totalSize);
     void*                       operator new (size_t, void* buf) { return buf; }
 
-#ifndef DARLING
+#if !(defined(DARLING) || defined(OSXIE)) && !defined(OSXIE)
     static bool                 inCache(uint64_t addr) { return (addr > SHARED_REGION_BASE) && (addr < SHARED_REGION_BASE+SHARED_REGION_SIZE); }
 #else
     static bool                 inCache(uint64_t addr) { return false; }

@@ -49,7 +49,7 @@ static bool hasHigh8(uint64_t addend)
     return ( (addend >> 48) != 0xFFFF );
 }
 
-#ifdef DARLING
+#if defined(DARLING) || defined(OSXIE)
 MachOAnalyzerSet::MachOAnalyzerSet() {}
 #endif
 

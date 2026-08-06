@@ -61,7 +61,7 @@ extern "C" void __cxa_finalize_ranges(const __cxa_range_t ranges[], unsigned int
 
 extern "C" int  __cxa_atexit(void (*func)(void *), void* arg, void* dso);
 
-#ifdef DARLING
+#if defined(DARLING) || defined(OSXIE)
 #define kdebug_is_enabled(...) 0
 #endif
 

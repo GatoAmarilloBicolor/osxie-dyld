@@ -1128,7 +1128,7 @@ void* _NSConcreteStackBlock[32];
 void* _NSConcreteGlobalBlock[32];
 
 
-#ifdef DARLING
+#if defined(DARLING) || defined(OSXIE)
 void _Block_object_assign(void* dest, const void* object, const int flags)
 #else
 void _Block_object_assign()

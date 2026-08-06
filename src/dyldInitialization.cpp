@@ -36,7 +36,7 @@
 #include "Tracing.h"
 
 // from libc.a
-#ifdef DARLING
+#if defined(DARLING) || defined(OSXIE)
 extern "C" void mach_init(const char* apple[]);
 #else
 extern "C" void mach_init();
@@ -88,7 +88,7 @@ static void runDyldInitializers(int argc, const char* argv[], const char* envp[]
 // On disk, all pointers in dyld's DATA segment are chained together.
 // They need to be fixed up to be real pointers to run.
 //
-#ifdef DARLING
+#if defined(DARLING) || defined(OSXIE)
 static void rebaseDyld(const dyld3::MachOLoaded* dyldMH, const char* apple[])
 #else
 static void rebaseDyld(const dyld3::MachOLoaded* dyldMH)
@@ -105,7 +105,7 @@ static void rebaseDyld(const dyld3::MachOLoaded* dyldMH)
     diag.assertNoError();
 
     // now that rebasing done, initialize mach/syscall layer
-#ifdef DARLING
+#if defined(DARLING) || defined(OSXIE)
     mach_init(apple);
 #else
     mach_init();
@@ -119,7 +119,7 @@ static void rebaseDyld(const dyld3::MachOLoaded* dyldMH)
     });
 }
 
-#ifdef DARLING
+#if defined(DARLING) || defined(OSXIE)
 extern "C" void sigexc_setup(void);
 #endif
 
@@ -134,7 +134,7 @@ uintptr_t start(const dyld3::MachOLoaded* appsMachHeader, int argc, const char* 
     // Emit kdebug tracepoint to indicate dyld bootstrap has started <rdar://46878536>
     dyld3::kdebug_trace_dyld_marker(DBG_DYLD_TIMING_BOOTSTRAP_START, 0, 0, 0, 0);
 
-#ifndef DARLING
+#if !(defined(DARLING) || defined(OSXIE)) && !defined(OSXIE)
 	// if kernel had to slide dyld, we need to fix up load sensitive locations
 	// we have to do this before using any global variables
     rebaseDyld(dyldsMachHeader);
@@ -148,14 +148,14 @@ uintptr_t start(const dyld3::MachOLoaded* appsMachHeader, int argc, const char* 
 	while(*apple != NULL) { ++apple; }
 	++apple;
 
-#ifdef DARLING
+#if defined(DARLING) || defined(OSXIE)
     rebaseDyld(dyldsMachHeader, apple);
 #endif
 
 	// set up random value for stack canary
 	__guard_setup(apple);
 
-#ifdef DARLING
+#if defined(DARLING) || defined(OSXIE)
 	sigexc_setup();
 #endif
 #if DYLD_INITIALIZER_SUPPORT

@@ -780,7 +780,7 @@ const void* address,
 size_t size, 
 NSObjectFileImage *objectFileImage)
 {
-#ifndef DARLING
+#if !(defined(DARLING) || defined(OSXIE)) && !defined(OSXIE)
     // <rdar://problem/51812762> NSCreatObjectFileImageFromMemory fail opaquely if Hardened runtime is enabled
     uint32_t flags;
     if ( csops(0, CS_OPS_STATUS, &flags, sizeof(flags)) != -1 ) {

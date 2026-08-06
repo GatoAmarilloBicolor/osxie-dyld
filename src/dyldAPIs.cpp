@@ -123,7 +123,7 @@ static NSLinkEditErrors sLastErrorFileCode;
 static int sLastErrorNo;
 #endif
 
-#ifdef DARLING
+#if defined(DARLING) || defined(OSXIE)
 extern "C" int mach_driver_get_dyld_fd(void);
 extern "C" void* elfcalls_get_pointer(void);
 extern "C" void mach_driver_set_dyld_fd(int fd);
@@ -260,7 +260,7 @@ static const struct dyld_func dyld_funcs[] = {
 #if OLD_LIBSYSTEM_SUPPORT
     {"__dyld_link_module",							(void*)_dyld_link_module },
 #endif
-#ifdef DARLING
+#if defined(DARLING) || defined(OSXIE)
 	{"__dyld_get_elfcalls", (void*)elfcalls_get_pointer },
 #endif
 #pragma clang diagnostic pop

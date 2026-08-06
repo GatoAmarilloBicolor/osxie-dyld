@@ -38,7 +38,7 @@
 #include <dispatch/dispatch.h>
 #include <mach-o/dyld.h>
 #include <System/sys/csr.h>
-#ifndef DARLING
+#if !defined(DARLING) && !defined(OSXIE)
 #include <rootless.h>
 #endif
 
@@ -51,7 +51,7 @@
 #include "Diagnostics.h"
 #include "JSONReader.h"
 
-#ifdef DARLING
+#if defined(DARLING) || defined(OSXIE)
 static int rootless_check_trusted(const char* path) { return -1; }
 static int rootless_check_trusted_class(const char* path, const char* cls) { return -1; }
 #endif
